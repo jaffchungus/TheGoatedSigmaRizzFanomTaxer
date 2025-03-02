@@ -194,6 +194,28 @@
             50% { background-position: 100% 100%; }
             100% { background-position: 0 0; }
         }
+
+        #sigma-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3em;
+            color: #ffff00;
+            text-shadow: 0 0 20px #ff00ff, 0 0 40px #00ffff;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 15px;
+            display: none;
+            z-index: 30;
+            animation: sigma-pop 2s infinite;
+        }
+
+        @keyframes sigma-pop {
+            0% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.1); }
+            100% { transform: translate(-50%, -50%) scale(1); }
+        }
     </style>
 </head>
 <body>
@@ -213,6 +235,7 @@
         <button onclick="answerYes()">Yes</button>
         <button onclick="answerNo()">No</button>
     </div>
+    <div id="sigma-message">MAN UR THE REAL SIGMA RIZZLER OHIO FANOM TAXER RIZZ RIZZ RIZZ</div>
 
     <script>
         let taxCount = 0;
@@ -224,28 +247,37 @@
             "Fanom Taxer",
             "TheGoatedSigmaRizzFanomTaxer"
         ];
+        const taxPerLevel = [5, 10, 30, 40, 1000];
+        const levelThresholds = [30, 200, 1000, 2000];
         const taxCounter = document.getElementById('tax-counter');
         const rizzFill = document.getElementById('rizz-fill');
         const rizzLabel = document.getElementById('rizz-label');
         const levelTitle = document.getElementById('level-title');
         const questionBox = document.getElementById('question-box');
         const taxButton = document.querySelector('.tax-button');
+        const sigmaMessage = document.getElementById('sigma-message');
 
         function taxEm() {
-            taxCount += Math.floor(Math.random() * 20) + 1;
+            taxCount += taxPerLevel[level];
             taxCounter.textContent = `Normies Taxed: ${taxCount}`;
             triggerShake();
             spawnParticles(10);
             updateRizzMeter();
 
-            if (taxCount >= (level + 1) * 50) {
+            if (taxCount >= levelThresholds[level] && level < levels.length - 1) {
                 showQuestion();
+                taxButton.disabled = true;
+            }
+
+            if (taxCount >= 1000000) {
+                showSigmaMessage();
                 taxButton.disabled = true;
             }
         }
 
         function updateRizzMeter() {
-            const percentage = Math.min((taxCount / ((level + 1) * 50)) * 100, 100);
+            const nextThreshold = level < levels.length - 1 ? levelThresholds[level] : 1000000;
+            const percentage = Math.min((taxCount / nextThreshold) * 100, 100);
             rizzFill.style.width = `${percentage}%`;
             rizzLabel.textContent = `Rizz Level: ${levels[level]}`;
         }
@@ -276,6 +308,12 @@
             updateRizzMeter();
             triggerLevelAnimation();
             spawnParticles(20);
+        }
+
+        function showSigmaMessage() {
+            sigmaMessage.style.display = 'block';
+            spawnParticles(50);
+            triggerShake();
         }
 
         function triggerShake() {
@@ -313,7 +351,6 @@
 
         setInterval(addGlitch, 1500);
 
-        // Massive stylesheet for animations and effects
         const styleSheet = document.createElement('style');
         styleSheet.textContent = `
             @keyframes shake {
@@ -332,23 +369,19 @@
         `;
         document.head.appendChild(styleSheet);
 
-        // Extended code for additional flair (padding to 1000+ lines)
         const extraStyles = `
-            /* Level-specific backgrounds */
             body.level-0 { background: linear-gradient(135deg, #0a0a0a, #333); }
             body.level-1 { background: linear-gradient(135deg, #0a0a0a, #660066); }
             body.level-2 { background: linear-gradient(135deg, #0a0a0a, #006666); }
             body.level-3 { background: linear-gradient(135deg, #0a0a0a, #ff0066); }
             body.level-4 { background: linear-gradient(135deg, #0a0a0a, #ffff00); }
 
-            /* Extra particle effects */
             .particle:nth-child(odd) { animation: particle-fly-alt 2s linear forwards; }
             @keyframes particle-fly-alt {
                 0% { transform: scale(1); opacity: 1; }
                 100% { transform: translateX(1000px) scale(0); opacity: 0; }
             }
 
-            /* Glitch variations */
             .glitch:nth-child(even) { animation: glitch-move-alt 3s infinite; }
             @keyframes glitch-move-alt {
                 0% { transform: translate(0, 0); opacity: 0; }
@@ -357,14 +390,12 @@
                 100% { transform: translate(0, 0); opacity: 0; }
             }
 
-            /* Button glow variations */
             .tax-button.level-0 { box-shadow: 0 0 15px #ff00ff; }
             .tax-button.level-1 { box-shadow: 0 0 20px #00ffff; }
             .tax-button.level-2 { box-shadow: 0 0 25px #ffff00; }
             .tax-button.level-3 { box-shadow: 0 0 30px #ff0066; }
             .tax-button.level-4 { box-shadow: 0 0 40px #00ff00; }
 
-            /* Over-the-top animations */
             @keyframes spin {
                 0% { transform: rotate(0deg); }
                 100% { transform: rotate(360deg); }
@@ -381,27 +412,22 @@
         `;
         styleSheet.textContent += extraStyles;
 
-        // Update body class on level change
         function updateBodyClass() {
             document.body.className = `level-${level}`;
         }
 
-        // Call updateBodyClass on level change
         const originalLevelUp = levelUp;
         levelUp = function() {
             originalLevelUp();
             updateBodyClass();
         };
 
-        // Initial setup
         updateBodyClass();
 
-        // Padding with more redundant but cool code
         for (let i = 0; i < 50; i++) {
             console.log(`Sigma Rizz Level ${i}: Activated`);
         }
 
-        // More particle variations
         function spawnExtraParticles() {
             for (let i = 0; i < 5; i++) {
                 const particle = document.createElement('div');
@@ -419,7 +445,6 @@
 
         setInterval(spawnExtraParticles, 3000);
 
-        // Additional glitch text variations
         function addExtraGlitch() {
             const glitch = document.createElement('div');
             glitch.className = 'glitch';
@@ -434,19 +459,16 @@
 
         setInterval(addExtraGlitch, 2000);
 
-        // More animations for flair
         styleSheet.textContent += `
             .tax-button:hover { animation: bounce 0.5s infinite; }
             #rizz-meter { animation: flicker 2s infinite; }
             h1.level-4 { animation: spin 5s infinite linear, glow 1s infinite alternate; }
         `;
 
-        // Extra console logs for "debugging" vibes
         for (let i = 0; i < 100; i++) {
             console.log(`Rizz Check ${i}: Sigma Status - ${Math.random() > 0.5 ? 'Goated' : 'Taxed'}`);
         }
 
-        // Random sound effect simulation (no actual audio, just visual feedback)
         function simulateSound() {
             const soundText = document.createElement('div');
             soundText.textContent = ['BOOM', 'WUB', 'BZZZ', 'SKRT'][Math.floor(Math.random() * 4)];
@@ -471,7 +493,6 @@
 
         setInterval(simulateSound, 4000);
 
-        // Final padding for line count
         for (let i = 0; i < 200; i++) {
             console.log(`Goated Sigma Rizz Fanom Taxer Iteration ${i}: Still the coolest`);
         }
